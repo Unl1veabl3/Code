@@ -1003,7 +1003,7 @@ function Library:MakeWindow(WindowConfig)
 				SliderConfig.Default = SliderConfig.Default or 50
 				SliderConfig.Callback = SliderConfig.Callback or function() end
 				SliderConfig.ValueName = SliderConfig.ValueName or ""
-				SliderConfig.Color = SliderConfig.Color or Color3.fromRGB(9, 149, 98)
+				SliderConfig.Color = SliderConfig.Color or Color3.fromRGB(9, 130, 183)
 				SliderConfig.Flag = SliderConfig.Flag or nil
 				SliderConfig.Save = SliderConfig.Save or false
 
