@@ -762,7 +762,7 @@ function OrionLib:MakeWindow(WindowConfig)
 			Container.Visible = true
 
 			-- ➕ Farbe ändern
-			TabFrame.Title.TextColor3 = Color3.fromRGB(61, 132, 208) -- Deine Wunschfarbe
+			TabFrame.Title.TextColor3 = Color3.fromRGB(244, 244, 244) -- Deine Wunschfarbe
 			TabFrame.Ico.ImageColor3 = Color3.fromRGB(61, 132, 208)
 		end    
 
