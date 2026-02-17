@@ -25,8 +25,17 @@ local OrionLib = {
 	SaveCfg = false
 }
 
-
+--Feather Icons https://github.com/evoincorp/lucideblox/tree/master/src/modules/util - Created by 7kayoh
 local Icons = {}
+--[[
+local Success, Response = pcall(function()
+	Icons = HttpService:JSONDecode(game:HttpGetAsync("https://raw.githubusercontent.com/evoincorp/lucideblox/master/src/modules/util/icons.json")).icons
+end)
+
+if not Success then
+	warn("\nOrion Library - Failed to load Feather Icons. Error code: " .. Response .. "\n")
+end	
+]]
 
 getgenv().gethui = function() 
 	return game.CoreGui 
@@ -465,7 +474,7 @@ function OrionLib:MakeWindow(WindowConfig)
 	if WindowConfig.IntroEnabled == nil then
 		WindowConfig.IntroEnabled = true
 	end
-	WindowConfig.IntroText = WindowConfig.IntroText or "Loading the Interface..."
+	WindowConfig.IntroText = WindowConfig.IntroText or "Loading Interface..."
 	WindowConfig.CloseCallback = WindowConfig.CloseCallback or function() end
 	WindowConfig.ShowIcon = WindowConfig.ShowIcon or false
 	WindowConfig.Icon = WindowConfig.Icon or "rbxassetid://108992388891490"
@@ -561,17 +570,17 @@ function OrionLib:MakeWindow(WindowConfig)
 				AddThemeObject(MakeElement("Stroke"), "Stroke"),
 				MakeElement("Corner", 1)
 			}),
-			AddThemeObject(SetProps(MakeElement("Label", "Goldenite User", WindowConfig.HidePremium and 14 or 13), {
+			AddThemeObject(SetProps(MakeElement("Label", "NZXT - Service", WindowConfig.HidePremium and 14 or 13), {
 				Size = UDim2.new(1, -60, 0, 13),
 				Position = WindowConfig.HidePremium and UDim2.new(0, 50, 0, 19) or UDim2.new(0, 50, 0, 12),
 				Font = Enum.Font.GothamBold,
 				ClipsDescendants = true
-			}), "TextWhite"),
-			AddThemeObject(SetProps(MakeElement("Label", "@71lr1", 12), {
+			}), "Text"),
+			AddThemeObject(SetProps(MakeElement("Label", "Made by Vanish", 12), {
 				Size = UDim2.new(1, -60, 0, 12),
 				Position = UDim2.new(0, 50, 1, -25),
 				Visible = not WindowConfig.HidePremium
-			}), "TextWhite")
+			}), "TextDark")
 		}),
 	}), "Second")
 
@@ -593,6 +602,13 @@ function OrionLib:MakeWindow(WindowConfig)
 		Size = UDim2.new(0, 615, 0, 344),
 		ClipsDescendants = true
 	}), {
+		--SetProps(MakeElement("Image", "rbxassetid://3523728077"), {
+		--	AnchorPoint = Vector2.new(0.5, 0.5),
+		--	Position = UDim2.new(0.5, 0, 0.5, 0),
+		--	Size = UDim2.new(1, 80, 1, 320),
+		--	ImageColor3 = Color3.fromRGB(33, 33, 33),
+		--	ImageTransparency = 0.7
+		--}),
 		SetChildren(SetProps(MakeElement("TFrame"), {
 			Size = UDim2.new(1, 0, 0, 50),
 			Name = "TopBar"
@@ -646,22 +662,22 @@ function OrionLib:MakeWindow(WindowConfig)
 
 	AddConnection(MinimizeBtn.MouseButton1Up, function()
 		if Minimized then
-			Minimized = false
-			WindowStuff.Visible = true
-			WindowTopBarLine.Visible = true
+			TweenService:Create(MainWindow, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, 615, 0, 344)}):Play()
 			MinimizeBtn.Ico.Image = "rbxassetid://7072719338"
 			wait(.02)
 			MainWindow.ClipsDescendants = false
-			TweenService:Create(MainWindow, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, 615, 0, 344)}):Play()
+			WindowStuff.Visible = true
+			WindowTopBarLine.Visible = true
 		else
-			Minimized = true
 			MainWindow.ClipsDescendants = true
 			WindowTopBarLine.Visible = false
 			MinimizeBtn.Ico.Image = "rbxassetid://7072720870"
+
 			TweenService:Create(MainWindow, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, WindowName.TextBounds.X + 140, 0, 50)}):Play()
-			wait(0.5)
+			wait(0.1)
 			WindowStuff.Visible = false	
 		end
+		Minimized = not Minimized    
 	end)
 
 	local function LoadSequence()
@@ -753,6 +769,10 @@ function OrionLib:MakeWindow(WindowConfig)
 			TabFrame.Title.TextTransparency = 0
 			TabFrame.Title.Font = Enum.Font.GothamBlack
 			Container.Visible = true
+
+			-- ➕ Farbe ändern
+			TabFrame.Title.TextColor3 = Color3.fromRGB(61, 132, 208) -- Deine Wunschfarbe
+			TabFrame.Ico.ImageColor3 = Color3.fromRGB(61, 132, 208)
 		end    
 
 		AddConnection(TabFrame.MouseButton1Click, function()
@@ -760,7 +780,7 @@ function OrionLib:MakeWindow(WindowConfig)
 				if Tab:IsA("TextButton") then
 					Tab.Title.Font = Enum.Font.GothamSemibold
 					Tab.Title.TextColor3 = OrionLib.Themes[OrionLib.SelectedTheme].Text
-					Tab.Ico.ImageColor3 = OrionLib.Themes[OrionLib.SelectedTheme].Text
+					Tab.Ico.ImageColor3 = OrionLib.Themes[OrionLib.SelectedTheme].TextDark
 					TweenService:Create(Tab.Ico, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {ImageTransparency = 0.4}):Play()
 					TweenService:Create(Tab.Title, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {TextTransparency = 0.4}):Play()
 				end
@@ -773,7 +793,10 @@ function OrionLib:MakeWindow(WindowConfig)
 			TweenService:Create(TabFrame.Ico, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {ImageTransparency = 0}):Play()
 			TweenService:Create(TabFrame.Title, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {TextTransparency = 0}):Play()
 			TabFrame.Title.Font = Enum.Font.GothamBlack
-			Container.Visible = true
+			Container.Visible = true   
+
+			TabFrame.Title.TextColor3 = Color3.fromRGB(61, 132, 208)
+			TabFrame.Ico.ImageColor3 = Color3.fromRGB(61, 132, 208)
 		end)
 
 		local function GetElements(ItemParent)
@@ -897,7 +920,7 @@ function OrionLib:MakeWindow(WindowConfig)
 				ToggleConfig.Name = ToggleConfig.Name or "Toggle"
 				ToggleConfig.Default = ToggleConfig.Default or false
 				ToggleConfig.Callback = ToggleConfig.Callback or function() end
-				ToggleConfig.Color = ToggleConfig.Color or Color3.fromRGB(240, 240, 240)
+				ToggleConfig.Color = ToggleConfig.Color or Color3.fromRGB(9, 99, 195)
 				ToggleConfig.Flag = ToggleConfig.Flag or nil
 				ToggleConfig.Save = ToggleConfig.Save or false
 
@@ -983,7 +1006,7 @@ function OrionLib:MakeWindow(WindowConfig)
 				SliderConfig.Default = SliderConfig.Default or 50
 				SliderConfig.Callback = SliderConfig.Callback or function() end
 				SliderConfig.ValueName = SliderConfig.ValueName or ""
-				SliderConfig.Color = SliderConfig.Color or Color3.fromRGB(240, 240, 240)
+				SliderConfig.Color = SliderConfig.Color or Color3.fromRGB(9, 149, 98)
 				SliderConfig.Flag = SliderConfig.Flag or nil
 				SliderConfig.Save = SliderConfig.Save or false
 
@@ -1274,6 +1297,7 @@ function OrionLib:MakeWindow(WindowConfig)
 				}), "Second")
 
 				AddConnection(BindBox.Value:GetPropertyChangedSignal("Text"), function()
+					--BindBox.Size = UDim2.new(0, BindBox.Value.TextBounds.X + 16, 0, 24)
 					TweenService:Create(BindBox, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, BindBox.Value.TextBounds.X + 16, 0, 24)}):Play()
 				end)
 
@@ -1399,6 +1423,7 @@ function OrionLib:MakeWindow(WindowConfig)
 				}), "Second")
 
 				AddConnection(TextboxActual:GetPropertyChangedSignal("Text"), function()
+					--TextContainer.Size = UDim2.new(0, TextboxActual.TextBounds.X + 16, 0, 24)
 					TweenService:Create(TextContainer, TweenInfo.new(0.45, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, TextboxActual.TextBounds.X + 16, 0, 24)}):Play()
 				end)
 
@@ -1695,6 +1720,8 @@ function OrionLib:MakeWindow(WindowConfig)
 		end
 		return ElementFunction   
 	end 
+
+
 
 	return TabFunction
 end   
