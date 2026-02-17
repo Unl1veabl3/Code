@@ -566,7 +566,7 @@ function OrionLib:MakeWindow(WindowConfig)
 				Position = WindowConfig.HidePremium and UDim2.new(0, 50, 0, 19) or UDim2.new(0, 50, 0, 12),
 				Font = Enum.Font.GothamBold,
 				ClipsDescendants = true
-			}), "Text"),
+			}), "TextWhite"),
 			AddThemeObject(SetProps(MakeElement("Label", "@71lr1", 12), {
 				Size = UDim2.new(1, -60, 0, 12),
 				Position = UDim2.new(0, 50, 1, -25),
